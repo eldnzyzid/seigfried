@@ -171,10 +171,11 @@
 
     footer { margin-top: 26px; font-size: .75rem; color: #8aa0b3; }
 
-    @media (max-width: 480px) {
-      .content { padding: 14px 20px 28px; }
-      h1 { font-size: 1.6rem; }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
+
+    .avatar img { object-position: center top; }
   </style>
 </head>
 <body>
