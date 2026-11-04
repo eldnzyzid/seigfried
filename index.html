@@ -5,20 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil Mahasiswa</title>
   <style>
-    body { font-family: Arial; background: #eaf2f8;
-           text-align: center; padding: 40px; }
-    .card { background: white; max-width: 500px;
-            margin: auto; padding: 30px; border-radius: 15px; }
-    h1 { color: #1769aa; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Profil Mahasiswa</h1>
-    <h2>Nama: Eldaniz Yazzid Hatrawijaya</h2>
-    <p>Program Studi: Manajemen Informasi Komunikasi</p>
-    <p>Saya sedang belajar Cloud Computing.</p>
-    <p>Email: eldanizyazzid@email.com</p>
-  </div>
-</body>
-</html>
+    :root {
+      --primary: #1769aa;
+      --accent: #00bcd4;
+      --dark: #0d2b45;
+      --soft: #eaf2f8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+      background: linear-gradient(135deg, #0d2b45 0%, #1769aa 55%, #00bcd4 100%);
+      background-attachment: fixed;
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* Hiasan awan di latar belakang (tema Cloud Computing) */
+    .cloud {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 100px;
