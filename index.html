@@ -72,7 +72,7 @@
     :root[data-theme="dark"] .sky-day   { opacity: 0; }
     :root[data-theme="dark"] .sky-night { opacity: 1; }
 
-    /* ---------- Matahari (mode terang) ---------- */
+    /* ---------- Matahari ---------- */
     .sun {
       position: fixed; z-index: 0;
       top: 7%; right: 9%;
@@ -93,31 +93,32 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     :root[data-theme="dark"] .sun { transform: translateY(340px) scale(.6); opacity: 0; }
 
-    /* ---------- Awan (mode terang) ---------- */
+    /* ---------- Awan (digerakkan lewat JavaScript agar halus & bisa dipercepat) ---------- */
     .clouds { position: fixed; inset: 0; z-index: 0; pointer-events: none; transition: opacity .8s ease; }
     :root[data-theme="dark"] .clouds { opacity: 0; }
     .cloud {
       position: absolute;
+      left: 0;
       background: rgba(255, 255, 255, 0.88);
       border-radius: 100px;
       filter: drop-shadow(0 6px 10px rgba(30, 90, 150, .15));
-      animation: drift 30s linear infinite;
+      will-change: transform;
+      transform: translate3d(-400px, 0, 0);
     }
     .cloud::before, .cloud::after {
       content: ""; position: absolute; background: inherit; border-radius: 50%;
     }
-    .cloud.c1 { width: 160px; height: 46px; top: 12%; left: -200px; }
+    .cloud.c1 { width: 160px; height: 46px; top: 12%; }
     .cloud.c1::before { width: 70px; height: 70px; top: -32px; left: 24px; }
     .cloud.c1::after  { width: 52px; height: 52px; top: -22px; left: 84px; }
-    .cloud.c2 { width: 220px; height: 60px; top: 68%; left: -260px; animation-duration: 45s; animation-delay: -12s; }
+    .cloud.c2 { width: 220px; height: 60px; top: 68%; }
     .cloud.c2::before { width: 95px; height: 95px; top: -44px; left: 34px; }
     .cloud.c2::after  { width: 70px; height: 70px; top: -30px; left: 118px; }
-    .cloud.c3 { width: 130px; height: 38px; top: 38%; left: -180px; animation-duration: 38s; animation-delay: -22s; opacity: .8; }
+    .cloud.c3 { width: 130px; height: 38px; top: 38%; opacity: .8; }
     .cloud.c3::before { width: 58px; height: 58px; top: -26px; left: 18px; }
     .cloud.c3::after  { width: 44px; height: 44px; top: -18px; left: 66px; }
-    @keyframes drift { to { transform: translateX(calc(100vw + 400px)); } }
 
-    /* ---------- Bulan (mode malam) ---------- */
+    /* ---------- Bulan ---------- */
     .moon {
       position: fixed; z-index: 0;
       top: 8%; right: 11%;
@@ -133,8 +134,8 @@
     }
     :root[data-theme="dark"] .moon { transform: translateY(0) scale(1) rotate(-20deg); opacity: 1; }
 
-    /* ---------- Bintang (mode malam) ---------- */
-    .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .9s ease; }
+    /* ---------- Bintang ---------- */
+    .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .9s ease; overflow: hidden; }
     :root[data-theme="dark"] .stars { opacity: 1; }
     .star {
       position: absolute; border-radius: 50%; background: #fff;
@@ -145,20 +146,17 @@
       0%, 100% { opacity: .25; transform: scale(.8); }
       50%      { opacity: 1;   transform: scale(1.2); }
     }
+
+    /* ---------- Bintang jatuh (dibuat & digerakkan lewat JavaScript) ---------- */
     .shooting {
-      position: absolute; top: 12%; left: 70%;
-      width: 120px; height: 2px;
-      background: linear-gradient(90deg, rgba(255,255,255,.9), transparent);
-      transform: rotate(-35deg);
+      position: absolute; top: 0; left: 0;
+      width: 130px; height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #fff, rgba(255,255,255,.55) 25%, transparent);
+      box-shadow: 0 0 8px 1px rgba(255,255,255,.55);
+      transform-origin: left center;
       opacity: 0;
-      animation: shoot 9s ease-in infinite;
-    }
-    .shooting.s2 { top: 30%; left: 35%; animation-delay: 4.5s; animation-duration: 12s; }
-    @keyframes shoot {
-      0%   { opacity: 0; transform: translate(0, 0) rotate(-35deg); }
-      2%   { opacity: 1; }
-      8%   { opacity: 0; transform: translate(-260px, 180px) rotate(-35deg); }
-      100% { opacity: 0; transform: translate(-260px, 180px) rotate(-35deg); }
+      will-change: transform, opacity;
     }
 
     /* ===================== TOMBOL SWITCH ===================== */
@@ -353,7 +351,7 @@
   <div class="sky sky-day"></div>
   <div class="sky sky-night"></div>
 
-  <!-- Mode terang: matahari & awan -->
+  <!-- Matahari & awan -->
   <div class="sun"></div>
   <div class="clouds">
     <div class="cloud c1"></div>
@@ -361,16 +359,12 @@
     <div class="cloud c3"></div>
   </div>
 
-  <!-- Mode malam: bulan & bintang -->
+  <!-- Bulan & bintang -->
   <div class="moon"></div>
-  <div class="stars" id="stars">
-    <div class="shooting"></div>
-    <div class="shooting s2"></div>
-  </div>
+  <div class="stars" id="stars"></div>
 
-  <!-- Tombol switch tema (gambar matahari & bulan) -->
-  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Beralih ke mode malam" aria-pressed="false" title="Ganti tema">
-    <!-- hiasan kecil di track -->
+  <!-- Tombol switch tema (gambar matahari & bulan, tanpa teks) -->
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti tema" aria-pressed="false">
     <svg class="deco-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#f3e9a0" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
     <svg class="deco-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#ffd93b"/></svg>
     <span class="knob">
@@ -453,9 +447,10 @@
     (function () {
       var root = document.documentElement;
       var btn = document.getElementById('themeToggle');
+      var starsLayer = document.getElementById('stars');
+      var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-      /* Buat bintang acak untuk mode malam */
-      var stars = document.getElementById('stars');
+      /* ---------- Bintang diam (berkedip lewat CSS) ---------- */
       for (var i = 0; i < 90; i++) {
         var s = document.createElement('span');
         s.className = 'star';
@@ -465,22 +460,130 @@
         s.style.top = (Math.random() * 90).toFixed(2) + '%';
         s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
         s.style.animationDuration = (2 + Math.random() * 3).toFixed(2) + 's';
-        stars.appendChild(s);
+        starsLayer.appendChild(s);
       }
 
+      /* ---------- Tombol tema ---------- */
       function apply(theme) {
         root.setAttribute('data-theme', theme);
-        var dark = theme === 'dark';
-        btn.setAttribute('aria-pressed', dark);
-        btn.setAttribute('aria-label', dark ? 'Beralih ke mode terang' : 'Beralih ke mode malam');
+        btn.setAttribute('aria-pressed', theme === 'dark');
       }
-
       apply(root.getAttribute('data-theme') || 'light');
 
       btn.addEventListener('click', function () {
         var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         apply(next);
         try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+
+      /* ==========================================================
+         ANIMASI INTERAKTIF: awan & bintang jatuh
+         - Satu loop requestAnimationFrame untuk semuanya (halus, 60fps).
+         - Klik latar belakang -> kecepatan 3x selama 1 detik,
+           dan bintang jatuh menjadi 2 (normalnya 1).
+         - Perubahan kecepatan di-ease (naik/turun mulus, tidak patah).
+         ========================================================== */
+      var BOOST_SPEED = 3;       // pengali kecepatan saat diklik
+      var BOOST_MS = 1000;       // lama efek (1 detik)
+      var EASE_RATE = 9;         // makin besar = transisi kecepatan makin cepat
+
+      var cloudDur = [30, 45, 38]; // detik untuk melintasi layar (kecepatan dasar)
+      var clouds = [].slice.call(document.querySelectorAll('.cloud')).map(function (el, idx) {
+        return { el: el, w: el.offsetWidth, x: 0, dur: cloudDur[idx] || 35 };
+      });
+      function placeClouds() {
+        var vw = window.innerWidth;
+        var start = [0.08, 0.5, 0.78];
+        clouds.forEach(function (c, idx) {
+          c.x = vw * (start[idx] !== undefined ? start[idx] : Math.random()) - c.w / 2;
+          c.el.style.transform = 'translate3d(' + c.x.toFixed(1) + 'px,0,0)';
+        });
+      }
+      placeClouds();
+
+      /* Bintang jatuh: arah kiri-bawah dengan sudut 35 derajat */
+      var COS = Math.cos(35 * Math.PI / 180), SIN = Math.sin(35 * Math.PI / 180);
+      var meteors = [];
+      var nextMeteorAt = 1200;
+
+      function spawnMeteor() {
+        var el = document.createElement('span');
+        el.className = 'shooting';
+        starsLayer.appendChild(el);
+        meteors.push({
+          el: el,
+          x: window.innerWidth * (0.35 + Math.random() * 0.7),
+          y: window.innerHeight * (-0.02 + Math.random() * 0.35),
+          v: 380 + Math.random() * 120,       // px/detik (kecepatan dasar)
+          total: 650 + Math.random() * 250,   // jarak tempuh
+          dist: 0
+        });
+      }
+
+      var mult = 1, boostUntil = 0, last = performance.now();
+
+      function frame(now) {
+        var dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+
+        /* Kecepatan menuju target dengan peredaman eksponensial (smooth) */
+        var boosting = now < boostUntil;
+        var target = boosting ? BOOST_SPEED : 1;
+        mult += (target - mult) * (1 - Math.exp(-dt * EASE_RATE));
+
+        /* Awan */
+        var vw = window.innerWidth;
+        for (var i = 0; i < clouds.length; i++) {
+          var c = clouds[i];
+          c.x += ((vw + 400) / c.dur) * mult * dt;
+          if (c.x > vw + 60) c.x = -c.w - 80;
+          c.el.style.transform = 'translate3d(' + c.x.toFixed(1) + 'px,0,0)';
+        }
+
+        /* Bintang jatuh (hanya dimunculkan di mode malam) */
+        var isDark = root.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+          var wanted = boosting ? 2 : 1;
+          if (boosting) {
+            while (meteors.length < wanted) spawnMeteor();
+            nextMeteorAt = now + 2500 + Math.random() * 2500;
+          } else if (meteors.length === 0 && now >= nextMeteorAt) {
+            spawnMeteor();
+            nextMeteorAt = now + 3000 + Math.random() * 3500;
+          }
+        }
+
+        for (var j = meteors.length - 1; j >= 0; j--) {
+          var m = meteors[j];
+          var step = m.v * mult * dt;
+          m.x -= COS * step;
+          m.y += SIN * step;
+          m.dist += step;
+          var p = m.dist / m.total;
+          if (p >= 1) {
+            m.el.remove();
+            meteors.splice(j, 1);
+            continue;
+          }
+          var o = p < 0.12 ? p / 0.12 : (p > 0.7 ? (1 - p) / 0.3 : 1);
+          m.el.style.opacity = o.toFixed(3);
+          m.el.style.transform = 'translate3d(' + m.x.toFixed(1) + 'px,' + m.y.toFixed(1) + 'px,0) rotate(-35deg)';
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      if (!reduceMotion) requestAnimationFrame(frame);
+
+      /* Klik di latar belakang (di luar kartu & tombol tema) */
+      document.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('.card, .theme-toggle')) return;
+        boostUntil = performance.now() + BOOST_MS;
+      });
+
+      window.addEventListener('resize', function () {
+        var vw = window.innerWidth;
+        clouds.forEach(function (c) { if (c.x > vw + 60) c.x = -c.w - 80; });
       });
     })();
   </script>
