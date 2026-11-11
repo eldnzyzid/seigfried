@@ -528,7 +528,7 @@
 
         /* Kecepatan menuju target dengan peredaman eksponensial (smooth) */
         var boosting = now < boostUntil;
-        var target = boosting ? BOOST_SPEED : 0,5;
+        var target = boosting ? BOOST_SPEED : 1;
         mult += (target - mult) * (1 - Math.exp(-dt * EASE_RATE));
 
         /* Awan */
