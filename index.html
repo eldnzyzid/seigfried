@@ -1,16 +1,52 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil Mahasiswa</title>
+  <script>
+    /* Set tema lebih awal supaya tidak berkedip saat halaman dimuat */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') {
+        t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <style>
     :root {
       --primary: #1769aa;
       --accent: #00bcd4;
+      --g1: #1769aa;
       --dark: #0d2b45;
       --soft: #eaf2f8;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --text: #3d5266;
+      --line: #d3e2ee;
+      --bar: #e3edf5;
+      --muted: #8aa0b3;
+      --avatar-border: #fff;
+      --chip-hover-text: #fff;
+      --card-shadow: 0 25px 60px rgba(0, 0, 0, 0.30);
     }
+    :root[data-theme="dark"] {
+      --primary: #63b6f2;
+      --accent: #00bcd4;
+      --g1: #1769aa;
+      --dark: #e6f1fa;
+      --soft: #1c3552;
+      --card-bg: rgba(14, 26, 48, 0.93);
+      --text: #b8c8d9;
+      --line: #2b4560;
+      --bar: #223a55;
+      --muted: #7189a2;
+      --avatar-border: #16263f;
+      --chip-hover-text: #06182a;
+      --card-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -20,225 +56,36 @@
       align-items: center;
       justify-content: center;
       padding: 40px 16px;
-      background: linear-gradient(135deg, #0d2b45 0%, #1769aa 55%, #00bcd4 100%);
-      background-attachment: fixed;
+      background: #0d2b45;
       color: var(--dark);
       overflow-x: hidden;
     }
 
-    /* Hiasan awan di latar belakang (tema Cloud Computing) */
-    .cloud {
-      position: fixed;
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 100px;
-      animation: drift 30s linear infinite;
-      z-index: 0;
+    /* ===================== LATAR LANGIT ===================== */
+    .sky {
+      position: fixed; inset: 0; z-index: 0;
+      transition: opacity 0.9s ease;
+      pointer-events: none;
     }
-    .cloud::before, .cloud::after {
-      content: ""; position: absolute; background: inherit; border-radius: 50%;
-    }
-    .cloud.c1 { width: 160px; height: 46px; top: 12%; left: -200px; }
-    .cloud.c1::before { width: 70px; height: 70px; top: -32px; left: 24px; }
-    .cloud.c1::after  { width: 52px; height: 52px; top: -22px; left: 84px; }
-    .cloud.c2 { width: 220px; height: 60px; top: 68%; left: -260px; animation-duration: 45s; animation-delay: -12s; }
-    .cloud.c2::before { width: 95px; height: 95px; top: -44px; left: 34px; }
-    .cloud.c2::after  { width: 70px; height: 70px; top: -30px; left: 118px; }
-    @keyframes drift { to { transform: translateX(calc(100vw + 400px)); } }
+    .sky-day   { background: linear-gradient(180deg, #3f9be0 0%, #7cc4f0 50%, #d6f0fc 100%); opacity: 1; }
+    .sky-night { background: linear-gradient(180deg, #03050f 0%, #0a1433 55%, #1b2b5e 100%); opacity: 0; }
+    :root[data-theme="dark"] .sky-day   { opacity: 0; }
+    :root[data-theme="dark"] .sky-night { opacity: 1; }
 
-    .card {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 520px;
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 24px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
-      overflow: hidden;
-      text-align: center;
-      animation: rise 0.8s ease both;
-    }
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .banner {
-      height: 130px;
-      background: linear-gradient(120deg, var(--primary), var(--accent));
-      position: relative;
-    }
-    .banner::after {
-      content: ""; position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,.25) 0 40px, transparent 41px),
-        radial-gradient(circle at 80% 70%, rgba(255,255,255,.18) 0 60px, transparent 61px);
-    }
-
-    .avatar {
-      width: 140px; height: 140px;
-      margin: -70px auto 0;
+    /* ---------- Matahari (mode terang) ---------- */
+    .sun {
+      position: fixed; z-index: 0;
+      top: 7%; right: 9%;
+      width: 110px; height: 110px;
       border-radius: 50%;
-      border: 6px solid #fff;
-      background: #fff;
-      box-shadow: 0 8px 20px rgba(0,0,0,.25);
-      position: relative; z-index: 2;
-      overflow: hidden;
-      transition: transform .4s ease;
+      background: radial-gradient(circle at 35% 35%, #fffbc4, #ffd93b 55%, #ffb300);
+      box-shadow: 0 0 40px 18px rgba(255, 214, 59, .55), 0 0 120px 60px rgba(255, 200, 0, .28);
+      transition: transform 1s ease, opacity .8s ease;
+      pointer-events: none;
     }
-    .avatar:hover { transform: scale(1.06) rotate(-3deg); }
-   .avatar svg, .avatar img { width: 100%; height: 100%; object-fit: contain; display: block; }
-
-    .content { padding: 16px 30px 34px; }
-
-    h1 { font-size: 1.9rem; color: var(--primary); margin-top: 12px; }
-    .role {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 6px 16px;
-      font-size: .85rem; font-weight: 600;
-      color: #fff;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius: 50px;
-    }
-    .bio {
-      margin-top: 18px;
-      line-height: 1.7;
-      color: #3d5266;
-      font-size: .98rem;
-    }
-
-    .section-title {
-      margin: 28px 0 12px;
-      font-size: .8rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--primary);
-      font-weight: 700;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .section-title::before, .section-title::after {
-      content: ""; flex: 1; height: 1px; background: #d3e2ee;
-    }
-
-    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .chip {
-      padding: 8px 16px;
-      background: var(--soft);
-      color: var(--primary);
-      border-radius: 50px;
-      font-size: .9rem; font-weight: 600;
-      transition: all .25s ease;
-      cursor: default;
-    }
-    .chip:hover {
-      background: var(--primary); color: #fff;
-      transform: translateY(-4px);
-      box-shadow: 0 6px 14px rgba(23,105,170,.35);
-    }
-
-    .skills { text-align: left; }
-    .skill { margin-bottom: 12px; }
-    .skill span { font-size: .85rem; font-weight: 600; }
-    .bar { height: 9px; background: #e3edf5; border-radius: 10px; margin-top: 5px; overflow: hidden; }
-    .bar i {
-      display: block; height: 100%; width: 0;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius: 10px;
-      animation: fill 1.4s .5s ease forwards;
-    }
-    @keyframes fill { to { width: var(--w); } }
-
-    .contact { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-    .contact-item { font-size: .95rem; color: #3d5266; }
-    .contact-item b { color: var(--primary); }
-
-    .socials { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-    .socials a {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 18px;
-      text-decoration: none;
-      font-size: .88rem; font-weight: 600;
-      color: #fff;
-      border-radius: 50px;
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-    .socials a:hover { transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,.25); }
-    .socials svg { width: 18px; height: 18px; fill: #fff; }
-    .ig { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); }
-    .li { background: #0a66c2; }
-    .gh { background: #24292f; }
-    .mail { background: var(--primary); }
-
-    footer { margin-top: 26px; font-size: .75rem; color: #8aa0b3; }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
-    }
-
-    .avatar img { object-position: center top; }
-  </style>
-</head>
-<body>
-  <div class="cloud c1"></div>
-  <div class="cloud c2"></div>
-
-  <div class="card">
-    <div class="banner"></div>
-
-<div class="avatar-wrap">
-  <div class="avatar">
-    <img src="photo.jpg" alt="Foto profil Eldaniz Yazzid Hatrawijaya">
-  </div>
-</div>
-
-    <div class="content">
-      <h1>Eldaniz Yazzid Hatrawijaya</h1>
-      <span class="role">Mahasiswa Manajemen Informasi dan Komunikasi</span>
-
-      <p class="bio">
-        Halo! Saya mahasigma yang antusias di dunia informasi dan teknologi.
-        Saat ini saya sedang mendalami Cloud Computing dan senang
-        mengubah ide menjadi karya digital yang bermanfaat.
-      </p>
-
-      <div class="section-title">Hobi &amp; Minat</div>
-      <div class="chips">
-        <span class="chip"> Cloud Computing</span>
-        <span class="chip"> Web Development</span>
-        <span class="chip"> Musik</span>
-        <span class="chip"> Nonton Sepakbola</span>
-      </div>
-
-      <div class="section-title">Kemampuan</div>
-      <div class="skills">
-        <div class="skill"><span>Cloud Computing</span><div class="bar"><i style="--w:30%"></i></div></div>
-        <div class="skill"><span>HTML &amp; CSS</span><div class="bar"><i style="--w:20%"></i></div></div>
-        <div class="skill"><span>Komunikasi &amp; Presentasi</span><div class="bar"><i style="--w:30%"></i></div></div>
-      </div>
-
-      <div class="section-title">Kontak</div>
-      <div class="contact">
-        <div class="contact-item"><b>Email:</b> eldanizyazzid@gmail.com</div>
-        <div class="contact-item"><b>Lokasi:</b> Yogyakarta, Indonesia</div>
-      </div>
-
-      <div class="socials">
-        <a class="mail" href="mailto:eldanizyazzid@gmail.com">
-          <svg viewBox="0 0 24 24"><path d="M2 5h20v14H2z M2 5l10 8 10-8" fill="none" stroke="#fff" stroke-width="2"/></svg>
-          Email
-        </a>
-        <a class="ig" href="https://instagram.com/eldnzyzzid_" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.5 6a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
-          Instagram
-        </a>
-        <a class="gh" href="https://github.com/eldnzyzid" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
-          GitHub
-        </a>
-      </div>
-
-      <footer>
-    </div>
-  </div>
-</body>
-</html>
+    .sun::before {
+      content: ""; position: absolute; inset: -46px; border-radius: 50%;
+      background: repeating-conic-gradient(rgba(255, 232, 110, .6) 0 5deg, transparent 5deg 15deg);
+      -webkit-mask: radial-gradient(circle, transparent 46%, #000 48%, transparent 72%);
+              mask: radial-gradient(circle, transparent 46%, #000 48%, transparent 72%);
+      animation: spin 50s linear infinite;
