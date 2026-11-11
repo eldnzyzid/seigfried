@@ -89,3 +89,400 @@
       -webkit-mask: radial-gradient(circle, transparent 46%, #000 48%, transparent 72%);
               mask: radial-gradient(circle, transparent 46%, #000 48%, transparent 72%);
       animation: spin 50s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    :root[data-theme="dark"] .sun { transform: translateY(340px) scale(.6); opacity: 0; }
+
+    /* ---------- Awan (mode terang) ---------- */
+    .clouds { position: fixed; inset: 0; z-index: 0; pointer-events: none; transition: opacity .8s ease; }
+    :root[data-theme="dark"] .clouds { opacity: 0; }
+    .cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.88);
+      border-radius: 100px;
+      filter: drop-shadow(0 6px 10px rgba(30, 90, 150, .15));
+      animation: drift 30s linear infinite;
+    }
+    .cloud::before, .cloud::after {
+      content: ""; position: absolute; background: inherit; border-radius: 50%;
+    }
+    .cloud.c1 { width: 160px; height: 46px; top: 12%; left: -200px; }
+    .cloud.c1::before { width: 70px; height: 70px; top: -32px; left: 24px; }
+    .cloud.c1::after  { width: 52px; height: 52px; top: -22px; left: 84px; }
+    .cloud.c2 { width: 220px; height: 60px; top: 68%; left: -260px; animation-duration: 45s; animation-delay: -12s; }
+    .cloud.c2::before { width: 95px; height: 95px; top: -44px; left: 34px; }
+    .cloud.c2::after  { width: 70px; height: 70px; top: -30px; left: 118px; }
+    .cloud.c3 { width: 130px; height: 38px; top: 38%; left: -180px; animation-duration: 38s; animation-delay: -22s; opacity: .8; }
+    .cloud.c3::before { width: 58px; height: 58px; top: -26px; left: 18px; }
+    .cloud.c3::after  { width: 44px; height: 44px; top: -18px; left: 66px; }
+    @keyframes drift { to { transform: translateX(calc(100vw + 400px)); } }
+
+    /* ---------- Bulan (mode malam) ---------- */
+    .moon {
+      position: fixed; z-index: 0;
+      top: 8%; right: 11%;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: inset -28px 8px 0 0 #fbf4c6;
+      filter: drop-shadow(0 0 18px rgba(255, 248, 190, .65));
+      transform: translateY(340px) scale(.6) rotate(-20deg);
+      opacity: 0;
+      transition: transform 1s ease, opacity .8s ease;
+      pointer-events: none;
+    }
+    :root[data-theme="dark"] .moon { transform: translateY(0) scale(1) rotate(-20deg); opacity: 1; }
+
+    /* ---------- Bintang (mode malam) ---------- */
+    .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .9s ease; }
+    :root[data-theme="dark"] .stars { opacity: 1; }
+    .star {
+      position: absolute; border-radius: 50%; background: #fff;
+      box-shadow: 0 0 6px 1px rgba(255, 255, 255, .8);
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: .25; transform: scale(.8); }
+      50%      { opacity: 1;   transform: scale(1.2); }
+    }
+    .shooting {
+      position: absolute; top: 12%; left: 70%;
+      width: 120px; height: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,.9), transparent);
+      transform: rotate(-35deg);
+      opacity: 0;
+      animation: shoot 9s ease-in infinite;
+    }
+    .shooting.s2 { top: 30%; left: 35%; animation-delay: 4.5s; animation-duration: 12s; }
+    @keyframes shoot {
+      0%   { opacity: 0; transform: translate(0, 0) rotate(-35deg); }
+      2%   { opacity: 1; }
+      8%   { opacity: 0; transform: translate(-260px, 180px) rotate(-35deg); }
+      100% { opacity: 0; transform: translate(-260px, 180px) rotate(-35deg); }
+    }
+
+    /* ===================== TOMBOL SWITCH ===================== */
+    .theme-toggle {
+      position: fixed; top: 18px; right: 18px; z-index: 10;
+      width: 82px; height: 42px;
+      padding: 0;
+      border: 2px solid rgba(255, 255, 255, .75);
+      border-radius: 50px;
+      background: linear-gradient(90deg, #6fc3f5, #b9e6fb);
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
+      transition: background .6s ease, border-color .6s ease, transform .2s ease;
+    }
+    .theme-toggle:hover { transform: scale(1.06); }
+    .theme-toggle:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    :root[data-theme="dark"] .theme-toggle {
+      background: linear-gradient(90deg, #10204a, #1d3470);
+      border-color: rgba(255, 255, 255, .35);
+    }
+    .theme-toggle .knob {
+      position: absolute; top: 3px; left: 3px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+      transition: transform .5s cubic-bezier(.6, -0.3, .3, 1.3), background .5s ease;
+      display: grid; place-items: center;
+    }
+    :root[data-theme="dark"] .theme-toggle .knob { transform: translateX(40px); background: #263a72; }
+    .knob svg { position: absolute; width: 22px; height: 22px; transition: opacity .4s ease, transform .6s ease; }
+    .knob .i-sun  { opacity: 1; transform: rotate(0) scale(1); }
+    .knob .i-moon { opacity: 0; transform: rotate(-90deg) scale(.4); }
+    :root[data-theme="dark"] .knob .i-sun  { opacity: 0; transform: rotate(90deg) scale(.4); }
+    :root[data-theme="dark"] .knob .i-moon { opacity: 1; transform: rotate(0) scale(1); }
+    /* Hiasan kecil di dalam track tombol */
+    .theme-toggle .deco-sun, .theme-toggle .deco-moon {
+      position: absolute; top: 50%; width: 16px; height: 16px; transform: translateY(-50%);
+      transition: opacity .4s ease;
+    }
+    .theme-toggle .deco-sun  { right: 9px; opacity: .85; }
+    .theme-toggle .deco-moon { left: 9px;  opacity: 0; }
+    :root[data-theme="dark"] .theme-toggle .deco-sun  { opacity: 0; }
+    :root[data-theme="dark"] .theme-toggle .deco-moon { opacity: .85; }
+
+    /* ===================== KARTU PROFIL ===================== */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      text-align: center;
+      animation: rise 0.8s ease both;
+      transition: background .6s ease, box-shadow .6s ease;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .banner {
+      height: 130px;
+      background: linear-gradient(120deg, var(--g1), var(--accent));
+      position: relative;
+    }
+    .banner::after {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.25) 0 40px, transparent 41px),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,.18) 0 60px, transparent 61px);
+    }
+
+    .avatar {
+      width: 140px; height: 140px;
+      margin: -70px auto 0;
+      border-radius: 50%;
+      border: 6px solid var(--avatar-border);
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(0,0,0,.25);
+      position: relative; z-index: 2;
+      overflow: hidden;
+      transition: transform .4s ease, border-color .6s ease;
+    }
+    .avatar:hover { transform: scale(1.06) rotate(-3deg); }
+    .avatar svg, .avatar img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .content { padding: 16px 30px 34px; }
+
+    h1 { font-size: 1.9rem; color: var(--primary); margin-top: 12px; transition: color .5s ease; }
+    .role {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 16px;
+      font-size: .85rem; font-weight: 600;
+      color: #fff;
+      background: linear-gradient(90deg, var(--g1), var(--accent));
+      border-radius: 50px;
+    }
+    .bio {
+      margin-top: 18px;
+      line-height: 1.7;
+      color: var(--text);
+      font-size: .98rem;
+      transition: color .5s ease;
+    }
+
+    .section-title {
+      margin: 28px 0 12px;
+      font-size: .8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+      transition: color .5s ease;
+    }
+    .section-title::before, .section-title::after {
+      content: ""; flex: 1; height: 1px; background: var(--line);
+    }
+
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .chip {
+      padding: 8px 16px;
+      background: var(--soft);
+      color: var(--primary);
+      border-radius: 50px;
+      font-size: .9rem; font-weight: 600;
+      transition: all .25s ease;
+      cursor: default;
+    }
+    .chip:hover {
+      background: var(--primary); color: var(--chip-hover-text);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 14px rgba(23,105,170,.35);
+    }
+
+    .skills { text-align: left; }
+    .skill { margin-bottom: 12px; }
+    .skill span { font-size: .85rem; font-weight: 600; color: var(--text); }
+    .bar { height: 9px; background: var(--bar); border-radius: 10px; margin-top: 5px; overflow: hidden; }
+    .bar i {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--g1), var(--accent));
+      border-radius: 10px;
+      animation: fill 1.4s .5s ease forwards;
+    }
+    @keyframes fill { to { width: var(--w); } }
+
+    .contact { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .contact-item { font-size: .95rem; color: var(--text); }
+    .contact-item b { color: var(--primary); }
+
+    .socials { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .socials a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      text-decoration: none;
+      font-size: .88rem; font-weight: 600;
+      color: #fff;
+      border-radius: 50px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .socials a:hover { transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,.25); }
+    .socials svg { width: 18px; height: 18px; fill: #fff; }
+    .ig { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); }
+    .li { background: #0a66c2; }
+    .gh { background: #24292f; }
+    :root[data-theme="dark"] .gh { background: #3a4048; }
+    .mail { background: var(--g1); }
+
+    footer { margin-top: 26px; font-size: .75rem; color: var(--muted); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+
+    .avatar img { object-position: center top; }
+
+    @media (max-width: 480px) {
+      .sun  { width: 80px; height: 80px; right: 6%; top: 11%; }
+      .moon { width: 74px; height: 74px; right: 8%; top: 11%; box-shadow: inset -21px 6px 0 0 #fbf4c6; }
+      .theme-toggle { top: 12px; right: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Latar langit -->
+  <div class="sky sky-day"></div>
+  <div class="sky sky-night"></div>
+
+  <!-- Mode terang: matahari & awan -->
+  <div class="sun"></div>
+  <div class="clouds">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
+
+  <!-- Mode malam: bulan & bintang -->
+  <div class="moon"></div>
+  <div class="stars" id="stars">
+    <div class="shooting"></div>
+    <div class="shooting s2"></div>
+  </div>
+
+  <!-- Tombol switch tema (gambar matahari & bulan) -->
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Beralih ke mode malam" aria-pressed="false" title="Ganti tema">
+    <!-- hiasan kecil di track -->
+    <svg class="deco-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#f3e9a0" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+    <svg class="deco-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#ffd93b"/></svg>
+    <span class="knob">
+      <!-- gambar matahari -->
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="5" fill="#ffb300"/>
+        <g stroke="#ffb300" stroke-width="2" stroke-linecap="round">
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>
+        </g>
+      </svg>
+      <!-- gambar bulan -->
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#fbf4c6" d="M20.5 14.2A8.8 8.8 0 0 1 9.8 3.5a8.8 8.8 0 1 0 10.7 10.7z"/>
+        <circle cx="16.5" cy="5.5" r=".9" fill="#fff"/>
+        <circle cx="19.5" cy="9" r=".6" fill="#fff"/>
+      </svg>
+    </span>
+  </button>
+
+  <div class="card">
+    <div class="banner"></div>
+
+    <div class="avatar-wrap">
+      <div class="avatar">
+        <img src="photo.jpg" alt="Foto profil Eldaniz Yazzid Hatrawijaya">
+      </div>
+    </div>
+
+    <div class="content">
+      <h1>Eldaniz Yazzid Hatrawijaya</h1>
+      <span class="role">Mahasiswa Manajemen Informasi dan Komunikasi</span>
+
+      <p class="bio">
+        Halo! Saya mahasigma yang antusias di dunia informasi dan teknologi.
+        Saat ini saya sedang mendalami Cloud Computing dan senang
+        mengubah ide menjadi karya digital yang bermanfaat.
+      </p>
+
+      <div class="section-title">Hobi &amp; Minat</div>
+      <div class="chips">
+        <span class="chip"> Cloud Computing</span>
+        <span class="chip"> Web Development</span>
+        <span class="chip"> Musik</span>
+        <span class="chip"> Nonton Sepakbola</span>
+      </div>
+
+      <div class="section-title">Kemampuan</div>
+      <div class="skills">
+        <div class="skill"><span>Cloud Computing</span><div class="bar"><i style="--w:30%"></i></div></div>
+        <div class="skill"><span>HTML &amp; CSS</span><div class="bar"><i style="--w:20%"></i></div></div>
+        <div class="skill"><span>Komunikasi &amp; Presentasi</span><div class="bar"><i style="--w:30%"></i></div></div>
+      </div>
+
+      <div class="section-title">Kontak</div>
+      <div class="contact">
+        <div class="contact-item"><b>Email:</b> eldanizyazzid@gmail.com</div>
+        <div class="contact-item"><b>Lokasi:</b> Yogyakarta, Indonesia</div>
+      </div>
+
+      <div class="socials">
+        <a class="mail" href="mailto:eldanizyazzid@gmail.com">
+          <svg viewBox="0 0 24 24"><path d="M2 5h20v14H2z M2 5l10 8 10-8" fill="none" stroke="#fff" stroke-width="2"/></svg>
+          Email
+        </a>
+        <a class="ig" href="https://instagram.com/eldnzyzzid_" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.5 6a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
+          Instagram
+        </a>
+        <a class="gh" href="https://github.com/eldnzyzid" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+          GitHub
+        </a>
+      </div>
+
+      <footer></footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var btn = document.getElementById('themeToggle');
+
+      /* Buat bintang acak untuk mode malam */
+      var stars = document.getElementById('stars');
+      for (var i = 0; i < 90; i++) {
+        var s = document.createElement('span');
+        s.className = 'star';
+        var size = (Math.random() * 2 + 1).toFixed(1);
+        s.style.width = s.style.height = size + 'px';
+        s.style.left = (Math.random() * 100).toFixed(2) + '%';
+        s.style.top = (Math.random() * 90).toFixed(2) + '%';
+        s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+        s.style.animationDuration = (2 + Math.random() * 3).toFixed(2) + 's';
+        stars.appendChild(s);
+      }
+
+      function apply(theme) {
+        root.setAttribute('data-theme', theme);
+        var dark = theme === 'dark';
+        btn.setAttribute('aria-pressed', dark);
+        btn.setAttribute('aria-label', dark ? 'Beralih ke mode terang' : 'Beralih ke mode malam');
+      }
+
+      apply(root.getAttribute('data-theme') || 'light');
+
+      btn.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        apply(next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>
