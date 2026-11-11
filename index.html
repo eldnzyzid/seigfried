@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil Mahasiswa</title>
   <script>
-    /* Set tema lebih awal supaya tidak berkedip saat halaman dimuat */
+    /* pasang tema lebih awal agar layar tidak kedip pas dibuka */
     (function () {
       var t = null;
       try { t = localStorage.getItem('theme'); } catch (e) {}
@@ -61,7 +61,7 @@
       overflow-x: hidden;
     }
 
-    /* ===================== LATAR LANGIT ===================== */
+    /* ===== langit ===== */
     .sky {
       position: fixed; inset: 0; z-index: 0;
       transition: opacity 0.9s ease;
@@ -72,7 +72,7 @@
     :root[data-theme="dark"] .sky-day   { opacity: 0; }
     :root[data-theme="dark"] .sky-night { opacity: 1; }
 
-    /* ---------- Matahari ---------- */
+    /* matahari */
     .sun {
       position: fixed; z-index: 0;
       top: 7%; right: 9%;
@@ -93,7 +93,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     :root[data-theme="dark"] .sun { transform: translateY(340px) scale(.6); opacity: 0; }
 
-    /* ---------- Awan (digerakkan lewat JavaScript agar halus & bisa dipercepat) ---------- */
+    /* awan */
     .clouds { position: fixed; inset: 0; z-index: 0; pointer-events: none; transition: opacity .8s ease; }
     :root[data-theme="dark"] .clouds { opacity: 0; }
     .cloud {
@@ -118,7 +118,7 @@
     .cloud.c3::before { width: 58px; height: 58px; top: -26px; left: 18px; }
     .cloud.c3::after  { width: 44px; height: 44px; top: -18px; left: 66px; }
 
-    /* ---------- Bulan ---------- */
+    /* bulan */
     .moon {
       position: fixed; z-index: 0;
       top: 8%; right: 11%;
@@ -134,7 +134,7 @@
     }
     :root[data-theme="dark"] .moon { transform: translateY(0) scale(1) rotate(-20deg); opacity: 1; }
 
-    /* ---------- Bintang ---------- */
+    /* bintang */
     .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .9s ease; overflow: hidden; }
     :root[data-theme="dark"] .stars { opacity: 1; }
     .star {
@@ -147,7 +147,7 @@
       50%      { opacity: 1;   transform: scale(1.2); }
     }
 
-    /* ---------- Bintang jatuh (dibuat & digerakkan lewat JavaScript) ---------- */
+    /* bintang jatuh */
     .shooting {
       position: absolute; top: 0; left: 0;
       width: 130px; height: 2px;
@@ -159,7 +159,7 @@
       will-change: transform, opacity;
     }
 
-    /* ===================== TOMBOL SWITCH ===================== */
+    /* ===== tombol ganti tema ===== */
     .theme-toggle {
       position: fixed; top: 18px; right: 18px; z-index: 10;
       width: 82px; height: 42px;
@@ -192,7 +192,7 @@
     .knob .i-moon { opacity: 0; transform: rotate(-90deg) scale(.4); }
     :root[data-theme="dark"] .knob .i-sun  { opacity: 0; transform: rotate(90deg) scale(.4); }
     :root[data-theme="dark"] .knob .i-moon { opacity: 1; transform: rotate(0) scale(1); }
-    /* Hiasan kecil di dalam track tombol */
+    /* ikon kecil di dalam tombol */
     .theme-toggle .deco-sun, .theme-toggle .deco-moon {
       position: absolute; top: 50%; width: 16px; height: 16px; transform: translateY(-50%);
       transition: opacity .4s ease;
@@ -202,7 +202,7 @@
     :root[data-theme="dark"] .theme-toggle .deco-sun  { opacity: 0; }
     :root[data-theme="dark"] .theme-toggle .deco-moon { opacity: .85; }
 
-    /* ===================== KARTU PROFIL ===================== */
+    /* ===== kartu profil ===== */
     .card {
       position: relative;
       z-index: 1;
@@ -347,11 +347,11 @@
   </style>
 </head>
 <body>
-  <!-- Latar langit -->
+  <!-- langit -->
   <div class="sky sky-day"></div>
   <div class="sky sky-night"></div>
 
-  <!-- Matahari & awan -->
+  <!-- matahari dan awan -->
   <div class="sun"></div>
   <div class="clouds">
     <div class="cloud c1"></div>
@@ -359,23 +359,23 @@
     <div class="cloud c3"></div>
   </div>
 
-  <!-- Bulan & bintang -->
+  <!-- bulan dan bintang -->
   <div class="moon"></div>
   <div class="stars" id="stars"></div>
 
-  <!-- Tombol switch tema (gambar matahari & bulan, tanpa teks) -->
+  <!-- tombol ganti tema -->
   <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti tema" aria-pressed="false">
     <svg class="deco-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#f3e9a0" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
     <svg class="deco-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#ffd93b"/></svg>
     <span class="knob">
-      <!-- gambar matahari -->
+      <!-- ikon matahari -->
       <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="12" r="5" fill="#ffb300"/>
         <g stroke="#ffb300" stroke-width="2" stroke-linecap="round">
           <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>
         </g>
       </svg>
-      <!-- gambar bulan -->
+      <!-- ikon bulan -->
       <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true">
         <path fill="#fbf4c6" d="M20.5 14.2A8.8 8.8 0 0 1 9.8 3.5a8.8 8.8 0 1 0 10.7 10.7z"/>
         <circle cx="16.5" cy="5.5" r=".9" fill="#fff"/>
@@ -398,7 +398,7 @@
       <span class="role">Mahasiswa Manajemen Informasi dan Komunikasi</span>
 
       <p class="bio">
-        Halo! Saya mahasigma yang antusias di dunia informasi dan teknologi.
+        Halo! Saya mahasiswa yang antusias di dunia informasi dan teknologi.
         Saat ini saya sedang mendalami Cloud Computing dan senang
         mengubah ide menjadi karya digital yang bermanfaat.
       </p>
@@ -450,7 +450,7 @@
       var starsLayer = document.getElementById('stars');
       var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-      /* ---------- Bintang diam (berkedip lewat CSS) ---------- */
+      /* bintang-bintang kecil gerak secara acak */
       for (var i = 0; i < 90; i++) {
         var s = document.createElement('span');
         s.className = 'star';
@@ -463,7 +463,7 @@
         starsLayer.appendChild(s);
       }
 
-      /* ---------- Tombol tema ---------- */
+      /* ganti tema saat tombol diklik */
       function apply(theme) {
         root.setAttribute('data-theme', theme);
         btn.setAttribute('aria-pressed', theme === 'dark');
@@ -476,18 +476,14 @@
         try { localStorage.setItem('theme', next); } catch (e) {}
       });
 
-      /* ==========================================================
-         ANIMASI INTERAKTIF: awan & bintang jatuh
-         - Satu loop requestAnimationFrame untuk semuanya (halus, 60fps).
-         - Klik latar belakang -> kecepatan 3x selama 1 detik,
-           dan bintang jatuh menjadi 2 (normalnya 1).
-         - Perubahan kecepatan di-ease (naik/turun mulus, tidak patah).
-         ========================================================== */
-      var BOOST_SPEED = 3;       // pengali kecepatan saat diklik
-      var BOOST_MS = 1000;       // lama efek (1 detik)
-      var EASE_RATE = 9;         // makin besar = transisi kecepatan makin cepat
+      /* animasi awan & bintang jatuh.
+         jika latar diklik, bintang dan awan bertambah cepat 3x selama 1 detik
+         dan bintang jatuhnya jadi 2 */
+      var BOOST_SPEED = 3;       // kecepatan jadi 3x pas diklik
+      var BOOST_MS = 1000;       // efeknya 1 detik
+      var EASE_RATE = 9;         // makin besar, perubahan kecepatannya makin cepat
 
-      var cloudDur = [30, 45, 38]; // detik untuk melintasi layar (kecepatan dasar)
+      var cloudDur = [30, 45, 38]; // waktu awan lewat layar (detik)
       var clouds = [].slice.call(document.querySelectorAll('.cloud')).map(function (el, idx) {
         return { el: el, w: el.offsetWidth, x: 0, dur: cloudDur[idx] || 35 };
       });
@@ -501,7 +497,7 @@
       }
       placeClouds();
 
-      /* Bintang jatuh: arah kiri-bawah dengan sudut 35 derajat */
+      /* bintang jatuh miring ke kiri bawah */
       var COS = Math.cos(35 * Math.PI / 180), SIN = Math.sin(35 * Math.PI / 180);
       var meteors = [];
       var nextMeteorAt = 1200;
@@ -514,8 +510,8 @@
           el: el,
           x: window.innerWidth * (0.35 + Math.random() * 0.7),
           y: window.innerHeight * (-0.02 + Math.random() * 0.35),
-          v: 380 + Math.random() * 120,       // px/detik (kecepatan dasar)
-          total: 650 + Math.random() * 250,   // jarak tempuh
+          v: 380 + Math.random() * 120,       // kecepatan
+          total: 650 + Math.random() * 250,   // jarak jatuhnya
           dist: 0
         });
       }
@@ -526,12 +522,12 @@
         var dt = Math.min((now - last) / 1000, 0.05);
         last = now;
 
-        /* Kecepatan menuju target dengan peredaman eksponensial (smooth) */
+        /* kecepatan naik turunnya dibuat pelan-pelan agar smooth */
         var boosting = now < boostUntil;
         var target = boosting ? BOOST_SPEED : 1;
         mult += (target - mult) * (1 - Math.exp(-dt * EASE_RATE));
 
-        /* Awan */
+        /* awan */
         var vw = window.innerWidth;
         for (var i = 0; i < clouds.length; i++) {
           var c = clouds[i];
@@ -540,7 +536,7 @@
           c.el.style.transform = 'translate3d(' + c.x.toFixed(1) + 'px,0,0)';
         }
 
-        /* Bintang jatuh (hanya dimunculkan di mode malam) */
+        /* bintang jatuh hanya muncul saat mode gelap */
         var isDark = root.getAttribute('data-theme') === 'dark';
         if (isDark) {
           var wanted = boosting ? 2 : 1;
@@ -575,7 +571,7 @@
 
       if (!reduceMotion) requestAnimationFrame(frame);
 
-      /* Klik di latar belakang (di luar kartu & tombol tema) */
+      /* klik di luar kartu = awan & bintang jatuh bertambah cepat */
       document.addEventListener('click', function (e) {
         if (e.target.closest && e.target.closest('.card, .theme-toggle')) return;
         boostUntil = performance.now() + BOOST_MS;
